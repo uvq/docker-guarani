@@ -30,6 +30,9 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     # Permite a Toba guardar los logs
 	chown -R www-data ${TOBA_INSTALACION_DIR}/i__desarrollo;
 
+    # Agrego también permisos a la carpeta temp
+    chown -R www-data ${HOME_GESTION}/temp
+
     # Permite al usuario HOST editar los archivos
 	chmod -R a+w ${TOBA_INSTALACION_DIR}
 fi

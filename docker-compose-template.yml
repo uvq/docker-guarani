@@ -6,8 +6,8 @@ data:
     - <PATH A GESTION>/docker-data/instalacion:/var/local/gestion/docker-data/instalacion
 
 web:
-  #build: .
-  image: siutoba/docker-guarani
+  build: .
+  #image: siutoba/docker-guarani
   ports:
    - "3000:80"
   links:
@@ -24,7 +24,7 @@ web:
   volumes:
    - <PATH A GESTION>:/var/local/gestion
    - <PATH A AUTO GESTION>:/var/local/autogestion
-
+   - <PATH A PREINSCRIPCION>:/var/local/preinscripcion
 # Descomentar este bloque si se desea utilizar el servidor Jasper
 #jasper:
 ##  build: jasper/
@@ -41,4 +41,5 @@ pg:
     POSTGRES_PASSWORD: postgres
   volumes_from:
    - data
-
+  ports:
+   - "5434:5432"
