@@ -1,6 +1,6 @@
 data:
   image: postgres:9.4
-  command: true
+  command: "true"
   volumes:
     - <PATH A GESTION>/docker-data/pgdata:/var/lib/postgresql/data
     - <PATH A GESTION>/docker-data/instalacion:/var/local/gestion/docker-data/instalacion
