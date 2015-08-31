@@ -48,3 +48,5 @@ echo "TOBA_DOCKER_ID=$DOCKER_CONTAINER_ID" > ${TOBA_INSTALACION_DIR}/toba_docker
 SCRIPT_ENTORNO_TOBA=`find ${HOME_TOBA}/bin/entorno_toba_*.sh`
 echo ". ${SCRIPT_ENTORNO_TOBA}" > /root/.bashrc
 echo "export TERM=xterm;" >> /root/.bashrc
+
+cp /var/local/gestion_conf/entorno_toba_2.6.sh ${SCRIPT_ENTORNO_TOBA}
