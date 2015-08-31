@@ -25,6 +25,7 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
     # Específico de Guaraní
     echo 'chequea_sincro_svn = 1' >> ${TOBA_INSTALACION_DIR}/instalacion.ini;
+    echo 'fop = /var/local/gestion/php/3ros/fop/fop' >> ${TOBA_INSTALACION_DIR}/instalacion.ini;
 	echo "menu = 2" > ${HOME_GESTION}/menu.ini;
 
     # Permite a Toba guardar los logs
@@ -32,6 +33,9 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
     # Agrego también permisos a la carpeta temp
     chown -R www-data ${HOME_GESTION}/temp
+    
+    # Agrego también permisos a la carpeta temp de TOBA
+    chown -R www-data ${HOME_TOBA}/temp
 
     # Permite al usuario HOST editar los archivos
 	chmod -R a+w ${TOBA_INSTALACION_DIR}

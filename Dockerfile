@@ -10,7 +10,7 @@ RUN mkdir /var/local/preinscripcion_conf/
 COPY var/preinscripcion/* /var/local/preinscripcion_conf/
 RUN mkdir /var/local/gestion_conf/
 COPY var/gestion/entorno_toba_2.6.sh /var/local/gestion_conf/entorno_toba_2.6.sh
-RUN apt-get update -y && apt-get install postgresql-client-9.4 -y
+RUN apt-get update -y && apt-get install postgresql-client-9.4 -y && apt-get install fop -y
 RUN echo 'pg:5432:*:postgres:postgres' > /root/.pgpass && chmod 700 /root/.pgpass
 
 ENV JASPER_HOST jasper
