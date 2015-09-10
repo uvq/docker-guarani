@@ -26,7 +26,6 @@ if [ ! -f ${BOBO_FILE} ]; then
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/src/siu/www
     cp /var/local/preinscripcion_conf/* ${HOME_PREINSCRIPCION}/instalacion
     cp ${HOME_PREINSCRIPCION}/instalacion/login_template.php ${HOME_PREINSCRIPCION}/instalacion/login.php 
-    ln -s ${HOME_PREINSCRIPCION}/instalacion/alias.conf /etc/apache2/sites-enabled/preinscripcion.conf
 
     echo -e '[desarrollo guarani preinscripcion]\nmotor = "postgres7"\nprofile = "pg"\npuerto = "5432"\nusuario = "postgres"\nclave = "postgres"\nbase = "preinscripcion"' >> ${TOBA_INSTALACION_DIR}/bases.ini
     psql -h pg -U postgres -d toba_guarani -c "INSERT INTO negocio.adm_bases_preinscripcion (fuente_de_datos, nombre) VALUES ('preinscripcion', 'Preinscripción');"
@@ -34,3 +33,4 @@ if [ ! -f ${BOBO_FILE} ]; then
     touch ${BOBO_FILE}
 fi
 
+ln -s ${HOME_PREINSCRIPCION}/instalacion/alias.conf /etc/apache2/sites-enabled/preinscripcion.conf
