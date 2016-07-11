@@ -25,6 +25,12 @@ web:
    - <PATH A GESTION>:/var/local/gestion
    - <PATH A AUTO GESTION>:/var/local/autogestion
    - <PATH A PREINSCRIPCION>:/var/local/preinscripcion
+
+# Descomentar para agregar hosts adicionales
+#  extra_hosts:
+#   - "host1:162.242.195.82"
+#   - "host2:50.31.209.229"
+
 # Descomentar este bloque si se desea utilizar el servidor Jasper
 #jasper:
 ##  build: jasper/
