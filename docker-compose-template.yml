@@ -12,6 +12,7 @@ web:
    - "3000:80"
   links:
    - pg
+   - mailhog
    # Activar este link si se desea utilizar el servidor de Jasper
 #   - jasper
   environment:
@@ -27,9 +28,9 @@ web:
    - <PATH A PREINSCRIPCION>:/var/local/preinscripcion
 
 # Descomentar para agregar hosts adicionales
-#  extra_hosts:
-#   - "host1:162.242.195.82"
-#   - "host2:50.31.209.229"
+  extra_hosts:
+   - "campusextension.dev:172.17.0.1"
+   - "qws.dev:172.17.0.1"
 
 # Descomentar este bloque si se desea utilizar el servidor Jasper
 #jasper:
@@ -49,3 +50,12 @@ pg:
    - data
   ports:
    - "5434:5432"
+
+mailhog:
+  image: mailhog/mailhog
+  ports:
+    - "8026:8026"
+  environment:
+    - MH_SMTP_BIND_ADDR=0.0.0.0:25
+    - MH_UI_BIND_ADDR=0.0.0.0:8026
+    - MH_API_BIND_ADDR=0.0.0.0:8026
