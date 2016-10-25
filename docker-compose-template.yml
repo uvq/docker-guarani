@@ -55,7 +55,16 @@ mailhog:
   image: mailhog/mailhog
   ports:
     - "8026:8026"
+  links:
+    - mongo
   environment:
     - MH_SMTP_BIND_ADDR=0.0.0.0:25
     - MH_UI_BIND_ADDR=0.0.0.0:8026
     - MH_API_BIND_ADDR=0.0.0.0:8026
+    - MH_STORAGE=mongodb
+    - MH_MONGO_URI=mongo:27017
+    - MH_MONGO_DB=local
+mongo:
+    image: mongo:latest
+    volumes:
+        - ./mongo_data/db:/data/db
