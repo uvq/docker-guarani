@@ -40,6 +40,7 @@ web:
 #   - pg
 #  volumes:
 #   - <PATH A GESTION>:/var/local/gestion
+#   - <PATH A AUTOGESTION>:/var/local/autogestion
 
 pg:
   image: postgres:9.4
