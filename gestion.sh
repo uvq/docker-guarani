@@ -17,7 +17,7 @@ export TOBA_INSTALACION_DIR=${HOME_GESTION}/docker-data/instalacion
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     echo -n postgres > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
-    ${HOME_GESTION}/lib/toba/bin/instalar -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba_guarani -c /tmp/clave_pg -k /tmp/clave_toba;
+    ${HOME_GESTION}/lib/toba/bin/instalar --no-interactive -n guarani -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba_guarani -c /tmp/clave_pg -k /tmp/clave_toba;
     ${HOME_GESTION}/lib/toba/bin/toba proyecto cargar -d ${HOME_GESTION} -p guarani -i desarrollo -a 1;
 
     # Instalar los juegos de dato de prueba
@@ -49,8 +49,9 @@ DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | hea
 echo "TOBA_DOCKER_ID=$DOCKER_CONTAINER_ID" > ${TOBA_INSTALACION_DIR}/toba_docker.env
 
 #Cada vez que se loguea por bash al container, carga las variables de entorno toba
-SCRIPT_ENTORNO_TOBA=`find ${HOME_TOBA}/bin/entorno_toba_*.sh`
-echo ". ${SCRIPT_ENTORNO_TOBA}" > /root/.bashrc
-echo "export TERM=xterm;" >> /root/.bashrc
+#SCRIPT_ENTORNO_TOBA=`find ${HOME_TOBA}/bin/entorno_toba_*.sh`
 
-cp /var/local/gestion_conf/entorno_toba_2.6.sh ${SCRIPT_ENTORNO_TOBA}
+cp /var/local/gestion_conf/entorno_toba_2.6.sh ${HOME_TOBA}/bin/entorno_toba_2.6.sh
+
+echo ". ${HOME_TOBA}/bin/entorno_toba_2.6.sh" > /root/.bashrc
+echo "export TERM=xterm;" >> /root/.bashrc
