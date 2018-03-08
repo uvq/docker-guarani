@@ -1,71 +1,63 @@
-data:
-  image: postgres:9.4
-  command: "true"
-  volumes:
-    - <PATH A GESTION>/docker-data/pgdata:/var/lib/postgresql/data
-    - <PATH A GESTION>/docker-data/instalacion:/var/local/gestion/docker-data/instalacion
+version: '2'
+services:
 
-web:
-  build: .
-  #image: siutoba/docker-guarani
-  ports:
-   - "3000:80"
-  links:
-   - pg
-   - mailhog
-   # Activar este link si se desea utilizar el servidor de Jasper
-#   - jasper
-  environment:
-   TOBA_ID_DESARROLLADOR: <ID DESARROLLADOR>
-   TOBA_PASS: <PASS DEL USUARIO TOBA>
-   # Descomentar esta variable de entorno para corregir permisos en OSX
-#   OSX: 1
-  volumes_from:
-   - data
-  volumes:
-   - <PATH A GESTION>:/var/local/gestion
-   - <PATH A AUTO GESTION>:/var/local/autogestion
-   - <PATH A PREINSCRIPCION>:/var/local/preinscripcion
+  web:
+    build: .
+    #image: siutoba/docker-guarani
+    ports:
+     - "3000:80"
 
-# Descomentar para agregar hosts adicionales
-  extra_hosts:
-   - "campusextension.dev:172.17.0.1"
-   - "qws.dev:172.17.0.1"
+    depends_on:
+      - "pg"
+    entrypoint: ["./wait-for-postgres.sh", "pg", "/entrypoint.d/entrypoint.sh"]
+    command: ["apache2-foreground"]
 
-# Descomentar este bloque si se desea utilizar el servidor Jasper
-#jasper:
-##  build: jasper/
-#  image: siutoba/docker-guarani-jasper
-#  links:
-#   - pg
-#  volumes:
-#   - <PATH A GESTION>:/var/local/gestion
-#   - <PATH A AUTOGESTION>:/var/local/autogestion
+    links:
+     - pg
+     - mailhog
+     - jasper
 
-pg:
-  image: postgres:9.4
-  environment:
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: postgres
-  volumes_from:
-   - data
-  ports:
-   - "5434:5432"
-
-mailhog:
-  image: mailhog/mailhog
-  ports:
-    - "8026:8026"
-  links:
-    - mongo
-  environment:
-    - MH_SMTP_BIND_ADDR=0.0.0.0:25
-    - MH_UI_BIND_ADDR=0.0.0.0:8026
-    - MH_API_BIND_ADDR=0.0.0.0:8026
-    - MH_STORAGE=mongodb
-    - MH_MONGO_URI=mongo:27017
-    - MH_MONGO_DB=local
-mongo:
-    image: mongo:latest
+    environment:
+     TOBA_ID_DESARROLLADOR: 231
+     TOBA_PASS: toba
+     # Descomentar esta variable de entorno para corregir permisos en OSX
+  #   OSX: 1
     volumes:
-        - ./mongo_data/db:/data/db
+     - ~/devel-guarani/gestion:/var/local/gestion
+     - ~/devel-guarani/docker-data/gestion/instalacion:/var/local/gestion/lib/toba/instalacion
+     - ~/devel-guarani/autogestion:/var/local/autogestion
+     - ~/devel-guarani/preinscripcion:/var/local/preinscripcion
+
+    extra_hosts:
+     - "campusextension.dev:172.17.0.1"
+     - "qws.dev:172.17.0.1"
+
+  # Descomentar este bloque si se desea utilizar el servidor Jasper
+  jasper:
+    build: jasper/
+    # image: siutoba/docker-guarani-jasper
+    links:
+     - pg
+    volumes:
+     - ~/devel-guarani/gestion:/var/local/gestion
+     - ~/devel-guarani/autogestion:/var/local/autogestion
+
+  pg:
+    image: postgres:9.4
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ~/devel-guarani/docker-data/pgdata:/var/lib/postgresql/data
+    ports:
+     - "5434:5432"
+    command: "-c bytea_output=escape -c standard_conforming_strings=off"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8026:8026"
+    environment:
+      - MH_SMTP_BIND_ADDR=0.0.0.0:25
+      - MH_UI_BIND_ADDR=0.0.0.0:8026
+      - MH_API_BIND_ADDR=0.0.0.0:8026
