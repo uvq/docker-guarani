@@ -5,7 +5,7 @@ services:
     build: .
     #image: siutoba/docker-guarani
     ports:
-     - "3000:80"
+      - "127.0.0.1:3000:80"
 
     depends_on:
       - "pg"
@@ -50,13 +50,13 @@ services:
     volumes:
       - ~/devel-guarani/docker-data/pgdata:/var/lib/postgresql/data
     ports:
-     - "5434:5432"
+      - "127.0.0.1:5434:5432"
     command: "-c bytea_output=escape -c standard_conforming_strings=off"
 
   mailhog:
     image: mailhog/mailhog
     ports:
-      - "8026:8026"
+      - "127.0.0.1:8026:8026"
     environment:
       - MH_SMTP_BIND_ADDR=0.0.0.0:25
       - MH_UI_BIND_ADDR=0.0.0.0:8026
