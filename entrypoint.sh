@@ -12,7 +12,7 @@ fi
 HOME_GESTION=/var/local/gestion
 HOME_TOBA=${HOME_GESTION}/lib/toba
 # se hace un export para que lo tome el toba al momento de la instalación
-export TOBA_INSTALACION_DIR=${HOME_GESTION}/docker-data/instalacion
+export TOBA_INSTALACION_DIR=${HOME_GESTION}/lib/toba/instalacion
 
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     echo -n postgres > /tmp/clave_pg;
@@ -33,7 +33,7 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
     # Agrego también permisos a la carpeta temp
     chown -R www-data ${HOME_GESTION}/temp
-    
+
     # Agrego también permisos a la carpeta temp de TOBA
     chown -R www-data ${HOME_TOBA}/temp
 
@@ -53,7 +53,7 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     echo "export TERM=xterm;" >> /root/.bashrc
 
     HOME_PREINSCRIPCION=/var/local/preinscripcion
-    
+
     psql -h pg -U postgres -c "CREATE DATABASE preinscripcion WITH ENCODING='LATIN1' OWNER=postgres TEMPLATE=template0 LC_COLLATE='C' LC_CTYPE='C' CONNECTION LIMIT=-1 TABLESPACE=pg_default;"
     psql -h pg -U postgres -d preinscripcion -f ${HOME_PREINSCRIPCION}/BD/Creacion/creacion_preinscripcion3_postgresql.sql
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/temp
@@ -61,7 +61,7 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/cache
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/src/siu/www
     cp /var/local/preinscripcion_conf/* ${HOME_PREINSCRIPCION}/instalacion
-    cp ${HOME_PREINSCRIPCION}/instalacion/login_template.php ${HOME_PREINSCRIPCION}/instalacion/login.php 
+    cp ${HOME_PREINSCRIPCION}/instalacion/login_template.php ${HOME_PREINSCRIPCION}/instalacion/login.php
 
     echo -e '[desarrollo guarani preinscripcion]\nmotor = "postgres7"\nprofile = "pg"\npuerto = "5432"\nusuario = "postgres"\nclave = "postgres"\nbase = "preinscripcion"' >> ${TOBA_INSTALACION_DIR}/bases.ini
     psql -h pg -U postgres -d toba_guarani -c "INSERT INTO negocio.adm_bases_preinscripcion (fuente_de_datos, nombre) VALUES ('preinscripcion', 'Preinscripción');"
