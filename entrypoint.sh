@@ -1,16 +1,10 @@
 #!/bin/bash
 
-if [ -z "$TOBA_ID_DESARROLLADOR" ]; then
-    TOBA_ID_DESARROLLADOR=0;
-fi
-
-if [ -z "$TOBA_PASS" ]; then
-    echo "Se utiliza el password default de toba (OjO)";
-    TOBA_PASS=toba;
-fi
-
 HOME_GESTION=/var/local/gestion
 HOME_TOBA=${HOME_GESTION}/lib/toba
+HOME_PREINSCRIPCION=/var/local/preinscripcion
+HOME_3W=/var/local/autogestion
+
 # se hace un export para que lo tome el toba al momento de la instalación
 export TOBA_INSTALACION_DIR=${HOME_GESTION}/lib/toba/instalacion
 
@@ -40,19 +34,6 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     # Permite al usuario HOST editar los archivos
 	chmod -R a+w ${TOBA_INSTALACION_DIR}
 
-    ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba_guarani.conf;
-    ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-available/toba_guarani.conf;
-
-
-    #Cada vez que se loguea por bash al container, carga las variables de entorno toba
-    #SCRIPT_ENTORNO_TOBA=`find ${HOME_TOBA}/bin/entorno_toba_*.sh`
-
-    cp /var/local/gestion_conf/entorno_toba_2.6.sh ${HOME_TOBA}/bin/entorno_toba_2.6.sh
-
-    echo ". ${HOME_TOBA}/bin/entorno_toba_2.6.sh" > /root/.bashrc
-    echo "export TERM=xterm;" >> /root/.bashrc
-
-    HOME_PREINSCRIPCION=/var/local/preinscripcion
 
     psql -h pg -U postgres -c "CREATE DATABASE preinscripcion WITH ENCODING='LATIN1' OWNER=postgres TEMPLATE=template0 LC_COLLATE='C' LC_CTYPE='C' CONNECTION LIMIT=-1 TABLESPACE=pg_default;"
     psql -h pg -U postgres -d preinscripcion -f ${HOME_PREINSCRIPCION}/BD/Creacion/creacion_preinscripcion3_postgresql.sql
@@ -66,11 +47,6 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     echo -e '[desarrollo guarani preinscripcion]\nmotor = "postgres7"\nprofile = "pg"\npuerto = "5432"\nusuario = "postgres"\nclave = "postgres"\nbase = "preinscripcion"' >> ${TOBA_INSTALACION_DIR}/bases.ini
     psql -h pg -U postgres -d toba_guarani -c "INSERT INTO negocio.adm_bases_preinscripcion (fuente_de_datos, nombre) VALUES ('preinscripcion', 'Preinscripción');"
 
-
-    ln -s ${HOME_PREINSCRIPCION}/instalacion/alias.conf /etc/apache2/sites-enabled/preinscripcion.conf
-
-    HOME_3W=/var/local/autogestion
-
     if [ ! -f "$HOME_3W/instalacion/config.php" ]; then
         cp /var/local/autogestion_conf/* $HOME_3W/instalacion
         cp $HOME_3W/instalacion/login_template.php $HOME_3W/instalacion/login.php
@@ -79,10 +55,20 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     fi
     chown www-data $HOME_3W/instalacion/log -R
 
-    ln -s $HOME_3W/instalacion/alias.conf /etc/apache2/sites-enabled/autogestion.conf
 
 fi
 
+
+
+#Los muevo fuera de la instalacion por si tenemos ya todo instalado y borramos los containers
+cp /var/local/gestion_conf/entorno_toba.sh ${HOME_TOBA}/bin/entorno_toba.sh
+echo ". ${HOME_TOBA}/bin/entorno_toba.sh" > /root/.bashrc
+echo "export TERM=xterm;" >> /root/.bashrc
+
+ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba_guarani.conf;
+ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-available/toba_guarani.conf;
+ln -s ${HOME_PREINSCRIPCION}/instalacion/alias.conf /etc/apache2/sites-enabled/preinscripcion.conf
+ln -s $HOME_3W/instalacion/alias.conf /etc/apache2/sites-enabled/autogestion.conf
 
 #Se deja el ID del container dentro de la configuración de toba, para luego poder usarlo desde el Host
 DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | head -n 1 | sed "s/docker-\(.*\).scope/\\1/"`

@@ -19,7 +19,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2/  --e
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install pgsql
 
-COPY var/gestion/entorno_toba_2.6.sh /var/local/gestion_conf/entorno_toba_2.6.sh
+COPY var/gestion/entorno_toba.sh /var/local/gestion_conf/entorno_toba.sh
 COPY entrypoint.sh /entrypoint.d/
 
 ENV JASPER_HOST jasper
