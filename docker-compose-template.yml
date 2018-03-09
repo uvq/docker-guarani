@@ -58,6 +58,6 @@ services:
     ports:
       - "127.0.0.1:8026:8026"
     environment:
-      - MH_SMTP_BIND_ADDR=0.0.0.0:25
+      - MH_SMTP_BIND_ADDR=0.0.0.0:1025
       - MH_UI_BIND_ADDR=0.0.0.0:8026
       - MH_API_BIND_ADDR=0.0.0.0:8026
