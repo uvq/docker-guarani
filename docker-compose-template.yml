@@ -12,16 +12,10 @@ services:
     entrypoint: ["./wait-for-postgres.sh", "pg", "/entrypoint.d/entrypoint.sh"]
     command: ["apache2-foreground"]
 
-    links:
-     - pg
-     - mailhog
-     - jasper
-
     environment:
-     TOBA_ID_DESARROLLADOR: 231
+     TOBA_ID_DESARROLLADOR: XXX
      TOBA_PASS: toba
-     # Descomentar esta variable de entorno para corregir permisos en OSX
-  #   OSX: 1
+    
     volumes:
      - ~/devel-guarani/gestion:/var/local/gestion
      - ~/devel-guarani/docker-data/gestion/instalacion:/var/local/gestion/lib/toba/instalacion
@@ -31,13 +25,13 @@ services:
     extra_hosts:
      - "campusextension.dev:172.17.0.1"
      - "qws.dev:172.17.0.1"
+     - "scc-test.unq.edu.ar:192.168.0.130"
 
   # Descomentar este bloque si se desea utilizar el servidor Jasper
   jasper:
     build: jasper/
     # image: siutoba/docker-guarani-jasper
-    links:
-     - pg
+    
     volumes:
      - ~/devel-guarani/gestion:/var/local/gestion
      - ~/devel-guarani/autogestion:/var/local/autogestion
@@ -61,3 +55,10 @@ services:
       - MH_SMTP_BIND_ADDR=0.0.0.0:1025
       - MH_UI_BIND_ADDR=0.0.0.0:8026
       - MH_API_BIND_ADDR=0.0.0.0:8026
+
+#hay que correr por unica vez
+#docker network create uvq_net
+networks:
+  default:
+    external:
+      name: uvq_net
