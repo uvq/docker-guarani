@@ -23,8 +23,6 @@ services:
      - ~/devel-guarani/preinscripcion:/var/local/preinscripcion
 
     extra_hosts:
-     - "campusextension.dev:172.17.0.1"
-     - "qws.dev:172.17.0.1"
      - "scc-test.unq.edu.ar:192.168.0.130"
 
   # Descomentar este bloque si se desea utilizar el servidor Jasper
