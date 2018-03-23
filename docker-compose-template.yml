@@ -24,7 +24,10 @@ services:
 
     extra_hosts:
      - "scc-test.unq.edu.ar:192.168.0.130"
-
+    networks:
+     default:
+      aliases:
+       - webg3
   # Descomentar este bloque si se desea utilizar el servidor Jasper
   jasper:
     build: jasper/
