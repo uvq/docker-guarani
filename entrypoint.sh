@@ -34,7 +34,9 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     # Permite al usuario HOST editar los archivos
 	chmod -R a+w ${TOBA_INSTALACION_DIR}
 
+fi
 
+if [ ! -f "$HOME_PREINSCRIPCION/instalacion/config.php" ]; then
     psql -h pg -U postgres -c "CREATE DATABASE preinscripcion WITH ENCODING='LATIN1' OWNER=postgres TEMPLATE=template0 LC_COLLATE='C' LC_CTYPE='C' CONNECTION LIMIT=-1 TABLESPACE=pg_default;"
     psql -h pg -U postgres -d preinscripcion -f ${HOME_PREINSCRIPCION}/BD/Creacion/creacion_preinscripcion3_postgresql.sql
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/temp
@@ -44,20 +46,24 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     cp /var/local/preinscripcion_conf/* ${HOME_PREINSCRIPCION}/instalacion
     cp ${HOME_PREINSCRIPCION}/instalacion/login_template.php ${HOME_PREINSCRIPCION}/instalacion/login.php
 
+    cd $HOME_PREINSCRIPCION
+    composer install
+    
     echo -e '[desarrollo guarani preinscripcion]\nmotor = "postgres7"\nprofile = "pg"\npuerto = "5432"\nusuario = "postgres"\nclave = "postgres"\nbase = "preinscripcion"' >> ${TOBA_INSTALACION_DIR}/bases.ini
     psql -h pg -U postgres -d toba_guarani -c "INSERT INTO negocio.adm_bases_preinscripcion (fuente_de_datos, nombre) VALUES ('preinscripcion', 'Preinscripción');"
-
-    if [ ! -f "$HOME_3W/instalacion/config.php" ]; then
-        cp /var/local/autogestion_conf/* $HOME_3W/instalacion
-        cp $HOME_3W/instalacion/login_template.php $HOME_3W/instalacion/login.php
-        cd $HOME_3W
-        composer install
-    fi
-    chown www-data $HOME_3W/instalacion/log -R
-
-
 fi
+    
 
+
+if [ ! -f "$HOME_3W/instalacion/config.php" ]; then
+    cp /var/local/autogestion_conf/* $HOME_3W/instalacion
+    cp $HOME_3W/instalacion/login_template.php $HOME_3W/instalacion/login.php
+    
+    cd $HOME_3W
+    composer install
+    
+    chown www-data $HOME_3W/instalacion/log -R
+fi
 
 
 #Los muevo fuera de la instalacion por si tenemos ya todo instalado y borramos los containers

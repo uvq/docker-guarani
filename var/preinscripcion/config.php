@@ -12,15 +12,7 @@ return array (
 	 * el ID de personalización en la configuración de los puntos de acceso.
 	 *  - Valores posibles: true|false
 	 */
-	'usar_personalizaciones' => false,
-
-	/**
-	 * Si está activo busca una clase siu\debug y ejecuta el metodo ini() 
-	 * después de cargar el núcleo
-	 *  - Valores posibles: true|false
-	 * En producción: false
-	 */
-	'ini_debug' => false,
+	'usar_personalizaciones' => true,
 
 	/**
 	* Path al directorio donde se guardarán los attachments de los mensajes. 
@@ -60,19 +52,10 @@ return array (
 
 	/**
 	 * Valor de SALT usado para cifrar las claves default de la sección de 
-	 * administración (usuarios administradores y gerenciales). Se recomienda 
-	 * NO CAMBIAR este valor.
+	 * administración (usuarios administradores). 
+	 * 
 	 */
 	'salt_admin' => '9bf057558b90263987bd8f99caf2e92f7efc1a13',
-
-	/**
-	 * Clave que se asigna por defecto al momento de crear un usuario gerencial.
-	 * En el primer acceso, se forzará al usuario a cambiarla.
-	 * También es la clave que se asigna al momento de resetear una clave de 
-	 * un usuario gerencial, volviendo a repetirse la necesidad de cambiarla en
-	 * el primer acceso
-	 */
-	'clave_default' => 'lala4321',
 
 	/**
 	 * Configuración de logging. Si no se especifica este bloque no se usa 
@@ -95,54 +78,6 @@ return array (
 	),
 
 	//--------------------------------------------------------------------------
-	//---- Configuración de puntos de acceso -----------------------------------
-	//--------------------------------------------------------------------------
-
-	'accesos' => array (
-		'alumno_ua1' => array (
-			/**
-			 * Id de la personalización que se va a utilizar. 
-			 * Representa el nombre de carpeta dentro de src/pers.
-			 * Si se deja en NULL no se utiliza ninguna personalización.
-			 */
-			'personalizacion' => NULL,
-
-			/**
-			 * Información de conexión de la base de datos
-			 */
-			'database' => array (
-				'vendor'		=> 'pgsql',
-				'dbname'		=> 'preinscripcion',
-				'host'			=> 'pg',
-				'port'			=> '5432',
-				'pdo_user'		=> 'postgres',
-				'pdo_passwd'	=> 'postgres',
-			),
-		),
-
-		'admin_ua1'	=> array (
-			/**
-			 * Id de la personalización que se va a utilizar. 
-			 * Representa el nombre de carpeta dentro de src/pers.
-			 * Si se deja en NULL no se utiliza ninguna personalización.
-			 */
-			'personalizacion'	=> NULL,
-
-			/**
-			 * Información de conexión de la base de datos
-			 */
-			'database' => array (
-				'vendor'		=> 'pgsql',
-				'dbname'		=> 'preinscripcion',
-				'host'			=> 'pg',
-				'port'			=> '5432',
-				'pdo_user'		=> 'postgres',
-				'pdo_passwd'	=> 'postgres',
-			),
-		),
-	),
-
-	//--------------------------------------------------------------------------
 	//---- Configuración de captcha --------------------------------------------
 	//--------------------------------------------------------------------------
 
@@ -155,7 +90,7 @@ return array (
 		 * Indica si se activan los captchas a través de toda la aplicación
 		 *  - Valores posibles: true|false
 		 */
-		'activo' => false,
+		'activo' => true,
 
 		/**
 		 * Cantidad de intentos fallidos permitidos antes
@@ -164,14 +99,14 @@ return array (
 		'intentos_login' => 2,
 
 		/**
-		 * Los valores de clave pública y privada provistos en este
-		 * ejemplo representan el valor de la URL http://localhost
+		 * Configuración de reCAPTCHA 2
+		 * Para obtener el par de API keys ('site_key' y 'secret_key')
+		 * ir a https://www.google.com/recaptcha/admin
 		 * 
-		 * Para generar las claves correspondientes a la URL de la instalación, 
-		 * dirigirse a https://www.google.com/recaptcha/admin
+		 * Los provistos en este ejemplo fueron generados para la URL http://localhost
 		 */
-		'public_key' => '6Ldja84SAAAAAKdiYZIbx6qjQMtAdzWXiW474_Af',
-		'private_key' => '6Ldja84SAAAAABchqHlz65yICNXJQ8ENbZpLvmS5',
+		'site_key' => '6LerglMUAAAAAE1-hBuBBO_lJIFCPLcwyfAn-0mJ', 
+		'secret_key' => '6LerglMUAAAAAIk1jzGr0iwI69Eb5W4w0G3kblrz', 
 	),
 
 	/**
@@ -192,16 +127,18 @@ return array (
 	/**
 	 * Se provee un ejemplo de configuración del correo usando el servidor de GMail
 	 */
-    'smtp' => array (
-        'from' => '******@gmail.com',
-        'from_name' => 'SIU-Preinscripción',
-        'host' => 'smtp.gmail.com',
-        'seguridad' => 'ssl',
-        'auth' => true,
-        'port' => 465,
-        'usuario' => '********@gmail.com',
-        'clave' => '*******',
-    ), 
+	'smtp' => array (
+		'from' => 'guarani@dev.com',
+		'from_name' => 'SIU-Preinscripción',
+		'host' => 'mailhog',
+		'seguridad' => null,
+		'auth' => false,
+		'port' => 1025,
+		'reply_to' => 'guarani@dev.com',
+		'usuario' => 'guarani@dev.com',
+		'clave' => '',
+	),
+
 	//--------------------------------------------------------------------------
 	//---- Configuración del logo de página ------------------------------------
 	//--------------------------------------------------------------------------
@@ -212,97 +149,164 @@ return array (
 	 */
 	'logo_pagina' => 'logo-transparente.png',
 
-	//--------------------------------------------------------------------------
-	//---- Parámetros sistema --------------------------------------------------
-	//--------------------------------------------------------------------------
+	 //--------------------------------------------------------------------------
+	 //---- Configuración de SSL, la cual define si la aplicación es accedida ---
+	 //---- vía el protocolo HTTP o HTTPS. --------------------------------------
+	 //--------------------------------------------------------------------------
 
-	/**
-	 * Longitud mínima de la clave de usuario
-	 *  - Valores permitidos: números enteros
-	 */
-	'clave_long_minima'	=> 6,
-
-	/**
-	 * Cantidad máxima de inscripciones permitidas 
-	 *  - Valores permitidos: números enteros
-	 * (0 : sin límite)
-	 */
-	'cant_max_carreras_insc' => 0,
-
-	/**
-	 * Determina si se cargan datos en la sección "Discapacidad"
-	 *  - Valores posibles: true | false
-	 */
-	'carga_datos_discapacidad' => true,
-	 
-	/**
-	 * Formatea uniformemente los campos de texto que ingresa el usuario en el sistema
-	 *  - Valores posibles: 
-	 *		+ 'libre' : Se deja la entrada tal cual como la ingresa el usuario
-	 *		+ 'mayusculas' : Se formatea todo en mayúsculas
-	 *		+ 'capitalizar' :  Se deja la primera letra de cada palabra en mayúsculas y el resto en minúsculas.
-	 */
-	'formateo_campos' => 'mayusculas',
-	 
-	/**
-	 * Determina si el aspirante debe elegir un turno para la presentación de documentación
-	 *  - Valores posibles: true | false
-	 */
-	'carga_turno_presentacion' => false,
+	 /**
+	  * alcance: si se indica 'all' la aplicación es accedida vía el protocolo HTTPS, si se indica 'none' se accede vía el protocolo HTTP, esta ultima es la opción por defecto. Los valores posibles son: 'none'|'all'
+	  * redirigir_ssl: indica si se debe redirigir en el caso que se halla accedido con el protocolo incorrecto, por defecto es true (redirige). Puede ser true o false
+	  */
+	 'ssl' => array(
+		 'alcance' => 'none',
+		 'redirigir_ssl' => false,
+	 ),
 
 	//--------------------------------------------------------------------------
-	//---- Parámetros del reporte (comprobante del alumno) ---------------------
+	//---- Configuración de puntos de acceso -----------------------------------
 	//--------------------------------------------------------------------------
 
-	/**
-	 * Nombre de la institución que se mostrará en el encabezado de página
-	 */
-	'rep_nombre_institucion' => 'INSTITUCIÓN SIU',
+	'accesos' => array (
+		'ua1' => array (
+			/**
+			 * Id de la personalización que se va a utilizar. 
+			 * Representa el nombre de carpeta dentro de src/pers.
+			 * Si se deja en NULL no se utiliza ninguna personalización.
+			 */
+			'personalizacion' => NULL,
 
-	/**
-	 * Determina si se imprime tabla para completar resultado de CBC
-	 *  - 1: Se imprime
-	 *  - 0: No se imprime
-	 */
-	'rep_imprime_CBC' => '0',
+			/**
+			 * Información de conexión de la base de datos
+			 */
+			'database' => array (
+				'vendor'		=> 'pgsql',
+				'dbname'		=> 'preinscripcion',
+				'host'			=> 'pg',
+				'port'			=> '5432',
+				'pdo_user'		=> 'postgres',
+				'pdo_passwd'	=> 'postgres',
+			),
+			
+			/**
+			 * Forma de obtener información de Guaraní
+			 *  - Valores posibles: 'consultas_bd'
+			 */
+			'modo_consultas_g3' => 'consultas_bd',
+			
+			/**
+			 * Si el parámetro 'modo_consultas_g3' está definido como 'consultas_bd', 
+			 * aquí se configura la información de conexión de la base de datos de Guaraní
+			 */
+			'database_guarani' => array (
+				'vendor'		=> 'pgsql',
+				'dbname'		=> 'toba_guarani',
+				'schema'		=> 'negocio',
+				'host'			=> 'pg',
+				'port'			=> '5432',
+				'pdo_user'		=> 'postgres',
+				'pdo_passwd'	=> 'postgres',
+			),
+			
+			//------------------------------------------------------------------
+			//-- Parámetros sistema --------------------------------------------
+			//--
+			//-- Desde versión 3.5.0 estos parámetros se incluyen dentro de este
+			//-- bloque, para permitir mayor flexibilidad de configuración en 
+			//-- instalaciones que manejan varios puntos de acceso
+			//------------------------------------------------------------------
 
-	/**
-	 * Determina si se imprime credencial provisoria
-	 *  - 1: Se imprime
-	 *  - 0: No se imprime
-	 */
-	'rep_imprime_credencial_provisoria' => '1',
+			/**
+			 * Longitud mínima de la clave de usuario
+			 *  - Valores permitidos: números enteros
+			 */
+			'clave_long_minima'	=> 6,
 
-	/**
-	 * URL del logo que se imprime en el encabezado de página, relativa a 
-	 * la carpeta www/img/ del proyecto.
-	 * IMPORTANTE: el logo debe estar en formato PNG y sin canal alfa
-	 * Si se elimina o comenta esta entrada, no se imprime logo.
-	 */
-	'rep_encabezado_logo' => 'logo2.png',
+			/**
+			 * Formatea uniformemente los campos de texto que ingresa el usuario en el sistema
+			 *  - Valores posibles: 
+			 *		+ 'libre' : Se deja la entrada tal cual como la ingresa el usuario
+			 *		+ 'mayusculas' : Se formatea todo en mayúsculas
+			 *		+ 'capitalizar' :  Se deja la primera letra de cada palabra en mayúsculas y el resto en minúsculas.
+			 */
+			'formateo_campos' => 'capitalizar',
 
-	/**
-	 * Arreglo para poner los ítems que se quieran imprimir como avisos en 
-	 * la impresión. 
-	 * Aparecerán en forma de lista numerada, respetando el orden de definición.
-	 * Se proveen valores de ejemplo.
-	 */
-	'rep_avisos' => array(
-		'La presente tiene carácter de <b>DECLARACIÓN JURADA</b>, la cual deberá ser completada personalmente por el firmante.',
-		'Se considerará <b>FALTA GRAVE</b>, pasible de suspensión de uno (1) a cinco (5) años de acuerdo a su importancia, el falseamiento de datos de la presente declaración jurada según lo dispuesto por Res. Nº1268/85 del Consejo Superior Provisorio de la Universidad de Buenos Aires. La presente deberá estar acompañada de tres (3) fotos, dos (2) fotocopias del título secundario legalizadas por U.B.A. Fotocopia de las dos (2) primeras hojas del DNI y una (1) fotocopia de la  Libreta Universitaria del CBC.',
-		'A partir de la fecha y durante el transcurso del presente ciclo lectivo, el peticionante deberá cumplir con el requisito obligatorio de la <b>revisación médica</b>, de no realizarla perderá su condición de alumno regular.',
-		'El trámite de <b>Libreta Universitaria</b> de esta Factultad deberá ser tramitada únicamente por el firmante en el próximo cuatrimestre desde la fecha de inscripción.',
+			/**
+			 * Determina si el aspirante debe elegir un turno para la presentación de documentación
+			 *  - Valores posibles: true | false
+			 */
+			'carga_turno_presentacion' => false,
+			
+			/**
+			 * Forma de generación de comprobante para presentar en la Institución
+			 *  - Valores posibles: 
+			 *      + ra: un comprobante por cada Responsable Académica
+			 *      + propuesta: un comprobante por cada Propuesta elegida
+			 *      + unico: un sólo comprobante por aspirante
+			 */
+			'modo_impresion_comprobante' => 'propuesta',
+			
+			//------------------------------------------------------------------
+			//---- Parámetros del reporte (comprobante del alumno) -------------
+			//------------------------------------------------------------------
+
+			/**
+			 * Nombre de la institución que se mostrará en el encabezado de página
+			 */
+			'rep_nombre_institucion' => 'Universidad Nacional de Quilmes',
+
+			/**
+			 * Determina si se imprime el período de inscripción (ID) junto con las propuestas elegidas
+			 *  - 1: Se imprime
+			 *  - 0: No se imprime
+			 */
+			'rep_imprime_periodo_insc' => '0',
+			
+			/**
+			 * Determina si se imprime tabla para completar resultado de CBC
+			 *  - 1: Se imprime
+			 *  - 0: No se imprime
+			 */
+			'rep_imprime_CBC' => '0',
+
+			/**
+			 * Determina si se imprime credencial provisoria
+			 *  - 1: Se imprime
+			 *  - 0: No se imprime
+			 */
+			'rep_imprime_credencial_provisoria' => '0',
+
+			/**
+			 * URL del logo que se imprime en el encabezado de página, relativa a 
+			 * la carpeta www/img/ del proyecto.
+			 * IMPORTANTE: el logo debe estar en formato PNG y sin canal alfa
+			 * Si se elimina o comenta esta entrada, no se imprime logo.
+			 */
+			'rep_encabezado_logo' => 'logo2.png',
+
+			/**
+			 * Si se desea imprimir el nombre de localidad junto con la fecha, a la altura
+			 * de la firma, consignarla aquí. Si no se desea, dejar un string vacío ('')
+			 * 
+			 * Ejemplo de salida (asumiendo fecha actual: 15/11/2012):
+			 *  - Completando este valor: Buenos Aires, 15/11/2012
+			 *  - Si no se ingresa valor: 15/11/2012
+			 */
+			'rep_localidad' => 'Buenos Aires',
+			
+			/**
+			 * Arreglo para poner los ítems que se quieran imprimir como avisos en 
+			 * la impresión. 
+			 * Aparecerán en forma de lista numerada, respetando el orden de definición.
+			 * Se proveen valores de ejemplo.
+			 */
+			'rep_avisos' => array(
+			   'La presente tiene carácter de <b>DECLARACIÓN JURADA</b>, la cual deberá ser completada personalmente por el firmante.',
+			   //'-- Completar aquí avisos que serán listados en el comprobante --',
+			   //'-- Cada línea de este arreglo aparecerá como un ítem de una lista numerada --',
+			),
+		),
 	),
-
-	/**
-	 * Si se desea imprimir el nombre de localidad junto con la fecha, a la altura
-	 * de la firma, consignarla aquí. Si no se desea, dejar un string vacío ('')
-	 * 
-	 * Ejemplo de salida (asumiendo fecha actual: 15/11/2012):
-	 *  - Completando este valor: Buenos Aires, 15/11/2012
-	 *  - Si no se ingresa valor: 15/11/2012
-	 */
-	'rep_localidad' => 'Buenos Aires',
 ),
 );
 ?>
