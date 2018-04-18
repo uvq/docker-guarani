@@ -74,7 +74,7 @@ return array (
 		 *  - 'info'
 		 *  - 'debug' -> recomendado en desarrollo
 		 */
-		'nivel'	=> 'error',
+		'nivel'	=> 'debug',
 	),
 
 	//--------------------------------------------------------------------------
@@ -174,7 +174,7 @@ return array (
 			 * Representa el nombre de carpeta dentro de src/pers.
 			 * Si se deja en NULL no se utiliza ninguna personalización.
 			 */
-			'personalizacion' => NULL,
+			'personalizacion' => ['uvq'],
 
 			/**
 			 * Información de conexión de la base de datos
