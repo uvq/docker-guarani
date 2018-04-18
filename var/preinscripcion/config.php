@@ -174,7 +174,7 @@ return array (
 			 * Representa el nombre de carpeta dentro de src/pers.
 			 * Si se deja en NULL no se utiliza ninguna personalización.
 			 */
-			'personalizacion' => ['uvq'],
+			'personalizacion' => ['unq'],
 
 			/**
 			 * Información de conexión de la base de datos
