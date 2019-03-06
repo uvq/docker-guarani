@@ -9,9 +9,11 @@ HOME_3W=/var/local/autogestion
 export TOBA_INSTALACION_DIR=${HOME_GESTION}/instalacion
 
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
+    cd $HOME_GESTION
+    composer install
     echo -n postgres > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
-    ${HOME_GESTION}/bin/toba instalar --no-interactive -n guarani -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba_guarani -c /tmp/clave_pg -k /tmp/clave_toba;
+    ${HOME_GESTION}/bin/toba instalacion instalar --no-interactive -n guarani -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba_guarani -c /tmp/clave_pg -k /tmp/clave_toba;
     ${HOME_GESTION}/bin/guarani cargar -d ${HOME_GESTION} -p guarani -i desarrollo -a 1;
 
     # Instalar los juegos de dato de prueba
