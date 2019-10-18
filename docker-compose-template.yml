@@ -3,7 +3,6 @@ services:
 
   web:
     build: .
-    #image: siutoba/docker-guarani
     ports:
       - "127.0.0.1:3000:80"
 
@@ -18,7 +17,6 @@ services:
     
     volumes:
      - ~/devel-guarani/gestion:/var/local/gestion
-     - ~/devel-guarani/docker-data/gestion/instalacion:/var/local/gestion/lib/toba/instalacion
      - ~/devel-guarani/autogestion:/var/local/autogestion
      - ~/devel-guarani/preinscripcion:/var/local/preinscripcion
 
@@ -30,15 +28,13 @@ services:
        - webg3
   # Descomentar este bloque si se desea utilizar el servidor Jasper
   jasper:
-    build: jasper/
-    # image: siutoba/docker-guarani-jasper
-    
-    volumes:
+   build: jasper/
+   volumes:
      - ~/devel-guarani/gestion:/var/local/gestion
      - ~/devel-guarani/autogestion:/var/local/autogestion
 
   pg:
-    image: postgres:9.4
+    image: postgres:9.6
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
