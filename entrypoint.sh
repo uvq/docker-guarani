@@ -9,9 +9,11 @@ HOME_3W=/var/local/autogestion
 export TOBA_INSTALACION_DIR=${HOME_GESTION}/instalacion
 
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
+    cd $HOME_GESTION
+    composer install
     echo -n postgres > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
-    ${HOME_GESTION}/bin/toba instalar --no-interactive -n guarani -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba_guarani -c /tmp/clave_pg -k /tmp/clave_toba;
+    ${HOME_GESTION}/bin/toba instalacion instalar --no-interactive -n guarani -d ${TOBA_ID_DESARROLLADOR} -t 0 -h pg -p 5432 -u postgres -b toba_guarani -c /tmp/clave_pg -k /tmp/clave_toba;
     ${HOME_GESTION}/bin/guarani cargar -d ${HOME_GESTION} -p guarani -i desarrollo -a 1;
 
     # Instalar los juegos de dato de prueba
@@ -38,7 +40,7 @@ fi
 
 if [ ! -f "$HOME_PREINSCRIPCION/instalacion/config.php" ]; then
     psql -h pg -U postgres -c "CREATE DATABASE preinscripcion WITH ENCODING='LATIN1' OWNER=postgres TEMPLATE=template0 LC_COLLATE='C' LC_CTYPE='C' CONNECTION LIMIT=-1 TABLESPACE=pg_default;"
-    psql -h pg -U postgres -d preinscripcion -f ${HOME_PREINSCRIPCION}/BD/Creacion/creacion_preinscripcion3_postgresql.sql
+    psql -h pg -U postgres -d preinscripcion -f ${HOME_PREINSCRIPCION}/BD/creacion/creacion_preinscripcion3_postgresql.sql
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/temp
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/log
     chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/cache
