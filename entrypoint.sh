@@ -28,44 +28,18 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 	chown -R www-data ${TOBA_INSTALACION_DIR}/i__desarrollo;
 
     # Agrego también permisos a la carpeta temp
-    chown -R www-data ${HOME_GESTION}/temp
+    chown -R www-data ${HOME_GESTION}/temp;
 
     # Agrego también permisos a la carpeta temp de TOBA
-    chown -R www-data ${HOME_TOBA}/temp
+    chown -R www-data ${HOME_TOBA}/temp;
 
     # Permite al usuario HOST editar los archivos
-	chmod -R a+w ${TOBA_INSTALACION_DIR}
+	chmod -R a+w ${TOBA_INSTALACION_DIR};
+
+    cp /var/local/gestion_conf/bases.ini ${TOBA_INSTALACION_DIR}/bases.ini;
 
 fi
 
-if [ ! -f "$HOME_PREINSCRIPCION/instalacion/config.php" ]; then
-    psql -h pg -U postgres -c "CREATE DATABASE preinscripcion WITH ENCODING='LATIN1' OWNER=postgres TEMPLATE=template0 LC_COLLATE='C' LC_CTYPE='C' CONNECTION LIMIT=-1 TABLESPACE=pg_default;"
-    psql -h pg -U postgres -d preinscripcion -f ${HOME_PREINSCRIPCION}/BD/creacion/creacion_preinscripcion3_postgresql.sql
-    chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/temp
-    chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/log
-    chown -R www-data:www-data ${HOME_PREINSCRIPCION}/instalacion/cache
-    chown -R www-data:www-data ${HOME_PREINSCRIPCION}/src/siu/www
-    cp /var/local/preinscripcion_conf/* ${HOME_PREINSCRIPCION}/instalacion
-    cp ${HOME_PREINSCRIPCION}/instalacion/login_template.php ${HOME_PREINSCRIPCION}/instalacion/login.php
-
-    cd $HOME_PREINSCRIPCION
-    composer install
-    
-    echo -e '[desarrollo guarani preinscripcion]\nmotor = "postgres7"\nprofile = "pg"\npuerto = "5432"\nusuario = "postgres"\nclave = "postgres"\nbase = "preinscripcion"' >> ${TOBA_INSTALACION_DIR}/bases.ini
-    psql -h pg -U postgres -d toba_guarani -c "INSERT INTO negocio.adm_bases_preinscripcion (fuente_de_datos, nombre) VALUES ('preinscripcion', 'Preinscripción');"
-fi
-    
-
-
-if [ ! -f "$HOME_3W/instalacion/config.php" ]; then
-    cp /var/local/autogestion_conf/* $HOME_3W/instalacion
-    cp $HOME_3W/instalacion/login_template.php $HOME_3W/instalacion/login.php
-    
-    cd $HOME_3W
-    composer install
-    
-    chown www-data $HOME_3W/instalacion/log -R
-fi
 
 
 #Los muevo fuera de la instalacion por si tenemos ya todo instalado y borramos los containers
@@ -75,8 +49,6 @@ echo "export TERM=xterm;" >> /root/.bashrc
 
 ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-enabled/toba_guarani.conf;
 ln -s ${TOBA_INSTALACION_DIR}/toba.conf /etc/apache2/sites-available/toba_guarani.conf;
-ln -s ${HOME_PREINSCRIPCION}/instalacion/alias.conf /etc/apache2/sites-enabled/preinscripcion.conf
-ln -s $HOME_3W/instalacion/alias.conf /etc/apache2/sites-enabled/autogestion.conf
 
 #Se deja el ID del container dentro de la configuración de toba, para luego poder usarlo desde el Host
 DOCKER_CONTAINER_ID=`cat /proc/self/cgroup | grep -o  -e "docker-.*.scope" | head -n 1 | sed "s/docker-\(.*\).scope/\\1/"`

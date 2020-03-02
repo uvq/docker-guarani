@@ -4,7 +4,7 @@ services:
   web:
     build: .
     ports:
-      - "127.0.0.1:3000:80"
+      - "127.0.0.1:3001:80"
 
     depends_on:
       - "pg"
@@ -16,46 +16,23 @@ services:
      TOBA_PASS: toba
     
     volumes:
-     - ~/devel-guarani/gestion:/var/local/gestion
-     - ~/devel-guarani/autogestion:/var/local/autogestion
-     - ~/devel-guarani/preinscripcion:/var/local/preinscripcion
+     - ./src/gestion:/var/local/gestion
 
     extra_hosts:
      - "scc-test.unq.edu.ar:192.168.0.130"
+
     networks:
      default:
       aliases:
        - webg3
-  # Descomentar este bloque si se desea utilizar el servidor Jasper
-  jasper:
-   build: jasper/
-   volumes:
-     - ~/devel-guarani/gestion:/var/local/gestion
-     - ~/devel-guarani/autogestion:/var/local/autogestion
 
   pg:
     image: postgres:9.6
+    command: postgres -c bytea_output=escape -c standard_conforming_strings=off
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ~/devel-guarani/docker-data/pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     ports:
-      - "127.0.0.1:5434:5432"
-    command: "-c bytea_output=escape -c standard_conforming_strings=off"
-
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "127.0.0.1:8026:8026"
-    environment:
-      - MH_SMTP_BIND_ADDR=0.0.0.0:1025
-      - MH_UI_BIND_ADDR=0.0.0.0:8026
-      - MH_API_BIND_ADDR=0.0.0.0:8026
-
-#hay que correr por unica vez
-#docker network create uvq_net
-networks:
-  default:
-    external:
-      name: uvq_net
+      - "127.0.0.1:5435:5432"
