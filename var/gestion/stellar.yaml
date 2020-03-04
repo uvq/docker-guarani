@@ -1,0 +1,7 @@
+logging: 30
+migrate_from_0_3_2: false
+project_name: guarani_testing
+stellar_url: postgresql://postgres@pg:5432/stellar_data
+tracked_databases:
+- guarani_testing
+url: postgresql://postgres@pg:5432/template1
