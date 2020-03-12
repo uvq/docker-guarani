@@ -38,6 +38,9 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
 
     cp /var/local/gestion_conf/bases.ini ${TOBA_INSTALACION_DIR}/bases.ini;
 
+    # Corrige un notice de toba 3.0 que se arreglo en versiones mas nuevas
+    sed -i 's/function\ EqualArrayExpectation/function\ __construct/g' /var/local/gestion/vendor/siu-toba/framework/php/modelo/lib/testing_unitario/toba_test.php
+
 fi
 
 
