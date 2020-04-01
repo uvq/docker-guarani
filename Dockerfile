@@ -1,4 +1,4 @@
-FROM siutoba/docker-web:latest
+FROM siutoba/docker-web:v1.7
 MAINTAINER pmoltedo@uvq.edu.ar
 
 RUN mkdir /var/local/autogestion_conf/
@@ -6,6 +6,7 @@ COPY var/autogestion/* /var/local/autogestion_conf/
 RUN mkdir /var/local/preinscripcion_conf/
 COPY var/preinscripcion/* /var/local/preinscripcion_conf/
 RUN mkdir /var/local/gestion_conf/
+COPY var/gestion/* /var/local/gestion_conf/
 RUN echo 'pg:5432:*:postgres:postgres' > /root/.pgpass && chmod 700 /root/.pgpass
 RUN pecl install apcu \
 && pecl install apcu_bc \

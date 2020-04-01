@@ -10,6 +10,7 @@ export TOBA_INSTALACION_DIR=${HOME_GESTION}/instalacion
 
 if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     cd $HOME_GESTION
+    composer require phpmailer/phpmailer
     composer install
     echo -n postgres > /tmp/clave_pg;
     echo -n ${TOBA_PASS} > /tmp/clave_toba;
@@ -17,7 +18,7 @@ if [ -z "$(ls -A "$TOBA_INSTALACION_DIR")" ]; then
     ${HOME_GESTION}/bin/guarani cargar -d ${HOME_GESTION} -p guarani -i desarrollo -a 1;
 
     # Instalar los juegos de dato de prueba
-    printf "\n" | ${HOME_GESTION}/bin/guarani instalar -j;
+    printf "\n" | ${HOME_GESTION}/bin/guarani instalar;
 
     # Específico de Guaraní
     echo 'chequea_sincro_svn = 1' >> ${TOBA_INSTALACION_DIR}/instalacion.ini;
