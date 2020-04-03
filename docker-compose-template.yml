@@ -14,7 +14,9 @@ services:
     environment:
      TOBA_ID_DESARROLLADOR: XXX
      TOBA_PASS: toba
-    
+     TOBA_DIR: /var/local/gestion/vendor/siu-toba/framework
+     TOBA_INSTALACION_DIR: /var/local/gestion/instalacion
+
     volumes:
      - ~/devel-guarani/gestion:/var/local/gestion
      - ~/devel-guarani/autogestion:/var/local/autogestion
@@ -27,12 +29,12 @@ services:
       aliases:
        - webg3
   # Descomentar este bloque si se desea utilizar el servidor Jasper
-  jasper:
-   build: jasper/
-   volumes:
-     - ~/devel-guarani/gestion:/var/local/gestion
-     - ~/devel-guarani/autogestion:/var/local/autogestion
-
+  #  jasper:
+  #   build: jasper/
+  #   volumes:
+  #     - ~/devel-guarani/gestion:/var/local/gestion
+  #     - ~/devel-guarani/autogestion:/var/local/autogestion
+  #
   pg:
     image: postgres:9.6
     environment:
