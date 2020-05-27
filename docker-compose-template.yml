@@ -28,13 +28,13 @@ services:
      default:
       aliases:
        - webg3
-  # Descomentar este bloque si se desea utilizar el servidor Jasper
-  #  jasper:
-  #   build: jasper/
-  #   volumes:
-  #     - ~/devel-guarani/gestion:/var/local/gestion
-  #     - ~/devel-guarani/autogestion:/var/local/autogestion
-  #
+
+  jasper:
+     build: jasper/
+     volumes:
+       - ~/devel-guarani/gestion:/var/local/gestion
+       - ~/devel-guarani/autogestion:/var/local/autogestion
+  
   pg:
     image: postgres:9.6
     environment:
@@ -43,8 +43,8 @@ services:
     volumes:
       - ~/devel-guarani/docker-data/pgdata:/var/lib/postgresql/data
     ports:
-      - "127.0.0.1:5434:5432"
-    command: "-c bytea_output=escape -c standard_conforming_strings=off"
+      - "0.0.0.0:5434:5432"
+    command: "-c bytea_output=escape -c standard_conforming_strings=off -c timezone=America/Argentina/Buenos_Aires -c log_timezone=America/Argentina/Buenos_Aires"
 
   mailhog:
     image: mailhog/mailhog
