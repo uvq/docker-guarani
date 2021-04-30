@@ -36,7 +36,7 @@ services:
        - ~/devel-guarani/autogestion:/var/local/autogestion
   
   pg:
-    image: postgres:9.6
+    image: postgres:11.6
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
